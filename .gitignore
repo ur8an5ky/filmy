@@ -62,3 +62,7 @@ dist/
 # Pliki systemów operacyjnych
 .DS_Store
 Thumbs.db
+
+# Neo4j credentials
+Neo*
+LR*

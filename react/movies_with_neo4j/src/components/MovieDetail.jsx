@@ -34,7 +34,7 @@ const MovieDetail = () => {
     const fetchMovie = async () => {
       try {
         const response = await apiClient.get(`/movie/${movieId}`);
-        setMovieTitle(response.data.title); // Założenie, że endpoint zwraca obiekt z polem 'title'
+        setMovieTitle(response.data.movie.title); // Założenie, że endpoint zwraca obiekt z polem 'title'
       } catch (error) {
         console.error('Error fetching movie:', error);
       }
@@ -87,11 +87,11 @@ const MovieDetail = () => {
   return (
     <Box sx={{ padding: 2 }}>
       <Paper elevation={3} sx={{ padding: 2, backgroundColor: 'white' }}>
+      <Typography variant="h4" gutterBottom sx={{fontWeight: 'bold', fontStyle: 'italic'}}>{movieTitle}</Typography>
         {director ? (
           <Typography variant="h6">Director: {director.first_name} {director.last_name}</Typography>
         ) : (
           <>
-          <Typography variant="h5" gutterBottom>{movieTitle || 'Loading movie...'}</Typography>
             <Typography variant="h6" gutterBottom>Add Director From Database</Typography>
             <form onSubmit={handleSelectSubmit}>
               <FormControl fullWidth sx={{ marginBottom: 2 }}>

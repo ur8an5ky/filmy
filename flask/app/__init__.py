@@ -5,6 +5,7 @@ from .resources.director import DirectorResource
 from .resources.actor import ActorResource
 from .resources.acts import Acts
 from .resources.directs import Directs
+from .resources.directs import MovieDirectorResource
 from flask_cors import CORS
 
 def create_app():
@@ -17,5 +18,6 @@ def create_app():
     api.add_resource(ActorResource, '/actor')
     api.add_resource(Acts, '/acts')
     api.add_resource(Directs, '/directs')
+    api.add_resource(MovieDirectorResource, '/movie/<string:movie_id>/director')
 
     return app

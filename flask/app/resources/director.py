@@ -11,8 +11,8 @@ class DirectorResource(Resource):
 
     def get(self):
         with self.driver.session() as session:
-            result = session.run("MATCH (d:Director) RETURN d.first_name, d.last_name")
-            directors = [{"first_name": record["d.first_name"], "last_name": record["d.last_name"]} for record in result]
+            result = session.run("MATCH (d:Director) RETURN d.director_id, d.first_name, d.last_name")
+            directors = [{"director_id": record["d.director_id"], "first_name": record["d.first_name"], "last_name": record["d.last_name"]} for record in result]
             return {"directors": directors}, 200
 
     def post(self):
@@ -22,9 +22,9 @@ class DirectorResource(Resource):
         last_name = args['last_name']
 
         with self.driver.session() as session:
-            session.run("CREATE (d:Director {id: $id, first_name: $first_name, last_name: $last_name})", 
+            session.run("CREATE (d:Director {director_id: $id, first_name: $first_name, last_name: $last_name})", 
                         id=director_id, first_name=first_name, last_name=last_name)
-            return {"message": f"Director '{first_name} {last_name}' created successfully.", "id": director_id}, 201
+            return {"message": f"Director '{first_name} {last_name}' created successfully.", "director_id": director_id}, 201
 
     def __del__(self):
         self.driver.close()

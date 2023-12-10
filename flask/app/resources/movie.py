@@ -11,8 +11,8 @@ class MovieResource(Resource):
 
     def get(self):
         with self.driver.session() as session:
-            result = session.run("MATCH (m:Movie) RETURN m.title, m.year")
-            movies = [{"title": record["m.title"], "year": record["m.year"]} for record in result]
+            result = session.run("MATCH (m:Movie) RETURN m.movie_id, m.title, m.year")
+            movies = [{"movie_id": record["m.movie_id"], "title": record["m.title"], "year": record["m.year"]} for record in result]
             return {"movies": movies}, 200
 
     def post(self):
@@ -22,9 +22,9 @@ class MovieResource(Resource):
         year = args.get('year')
 
         with self.driver.session() as session:
-            session.run("CREATE (m:Movie {id: $id, title: $title, year: $year})", 
+            session.run("CREATE (m:Movie {movie_id: $id, title: $title, year: $year})", 
                         id=movie_id, title=title, year=year)
-            return {"message": f"Movie '{title}' created successfully.", "id": movie_id}, 201
+            return {"message": f"Movie '{title}' created successfully.", "movie_id": movie_id}, 201
 
     def __del__(self):
         self.driver.close()

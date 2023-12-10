@@ -28,3 +28,26 @@ class MovieResource(Resource):
 
     def __del__(self):
         self.driver.close()
+
+
+class SingleMovieResource(Resource):
+    def __init__(self):
+        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io",
+                                           auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+    def get(self, movie_id):
+        with self.driver.session() as session:
+            result = session.run("MATCH (m:Movie {movie_id: $movie_id}) "
+                                 "RETURN m.title AS title, m.year AS year",
+                                 movie_id=movie_id)
+            movie_record = result.single()
+            if movie_record:
+                return {
+                    "movie": {
+                        "title": movie_record["title"],
+                        "year": movie_record["year"]
+                    }
+                }, 200
+            else:
+                return {"message": "Movie not found"}, 404
+    def __del__(self):
+        self.driver.close()

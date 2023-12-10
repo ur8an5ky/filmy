@@ -5,6 +5,7 @@ import { TextField, Button, Paper, Box, FormControl, InputLabel, Select, MenuIte
 
 const MovieDetail = () => {
   const { movieId } = useParams();
+  const [movieTitle, setMovieTitle] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [director, setDirector] = useState(null);
@@ -30,8 +31,18 @@ const MovieDetail = () => {
       }
     };
 
+    const fetchMovie = async () => {
+      try {
+        const response = await apiClient.get(`/movie/${movieId}`);
+        setMovieTitle(response.data.title); // Założenie, że endpoint zwraca obiekt z polem 'title'
+      } catch (error) {
+        console.error('Error fetching movie:', error);
+      }
+    };
+    
     fetchDirector();
     fetchDirectors();
+    fetchMovie();
   }, [movieId]);
 
   const handleDirectorChange = (event) => {
@@ -80,6 +91,7 @@ const MovieDetail = () => {
           <Typography variant="h6">Director: {director.first_name} {director.last_name}</Typography>
         ) : (
           <>
+          <Typography variant="h5" gutterBottom>{movieTitle || 'Loading movie...'}</Typography>
             <Typography variant="h6" gutterBottom>Add Director From Database</Typography>
             <form onSubmit={handleSelectSubmit}>
               <FormControl fullWidth sx={{ marginBottom: 2 }}>

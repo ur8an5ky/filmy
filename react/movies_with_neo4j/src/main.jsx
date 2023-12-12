@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Header />
           <Routes>
             <Route path="/add-movie" element={<MovieForm />} />
-            <Route path="/movies" element={<Movies />} />
+            <Route path={["/", "/movies"]} element={<Movies />} />
             <Route path="/directors" element={<Directors />} />
 
             <Route path="/movies/:movieId/details" element={<MovieDetail />} />

@@ -1,1 +1,1 @@
-web: cd react/movies_with_neo4j && npm install && npm run build && cd ../../flask && python run.py
+web: cd react/movies_with_neo4j && yarn build && cd ../../flask && python run.py

@@ -2,9 +2,9 @@
     "name": "twoja-aplikacja",
     "version": "1.0.0",
     "scripts": {
-        "build": "cd react/movies_with_neo4j && NPM_CONFIG_PRODUCTION=false yarn add && yarn build",
+        "build": "cd react/movies_with_neo4j && yarn && yarn build",
         "start": "python flask/run.py"
-      },      
+      },          
     "engines": {
         "node": "12.x"
     }

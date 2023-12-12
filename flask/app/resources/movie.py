@@ -1,10 +1,12 @@
 from flask_restful import Resource, reqparse
 from neo4j import GraphDatabase, basic_auth
 import uuid
+from . import myUri, myPassword
+
 
 class MovieResource(Resource):
     def __init__(self):
-        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io", auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+        self.driver = GraphDatabase.driver(myUri, auth=basic_auth("neo4j", myPassword))
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('title', required=True, help="Title cannot be blank")
         self.parser.add_argument('year', type=int, help="Year of the movie")
@@ -32,8 +34,7 @@ class MovieResource(Resource):
 
 class SingleMovieResource(Resource):
     def __init__(self):
-        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io",
-                                           auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+        self.driver = GraphDatabase.driver(myUri, auth=basic_auth("neo4j", myPassword))
     def get(self, movie_id):
         with self.driver.session() as session:
             result = session.run("MATCH (m:Movie {movie_id: $movie_id}) "

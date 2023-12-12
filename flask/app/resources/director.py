@@ -1,10 +1,12 @@
 from flask_restful import Resource, reqparse
 from neo4j import GraphDatabase, basic_auth
 import uuid
+from . import myUri, myPassword
+
 
 class DirectorResource(Resource):
     def __init__(self):
-        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io", auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+        self.driver = GraphDatabase.driver(myUri, auth=basic_auth("neo4j", myPassword))
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('first_name', required=True, help="First name cannot be blank")
         self.parser.add_argument('last_name', required=True, help="Last name cannot be blank")

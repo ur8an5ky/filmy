@@ -1,10 +1,11 @@
 from flask_restful import Resource, reqparse
 from neo4j import GraphDatabase, basic_auth
+from . import myUri, myPassword
+
 
 class Directs(Resource):
     def __init__(self):
-        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io", 
-                                           auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+        self.driver = GraphDatabase.driver(myUri, auth=basic_auth("neo4j", myPassword))
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('director_id', required=True, help="Director ID cannot be blank")
         self.parser.add_argument('movie_id', required=True, help="Movie ID cannot be blank")
@@ -32,8 +33,7 @@ class Directs(Resource):
 
 class MovieDirectorResource(Resource):
     def __init__(self):
-        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io", 
-                                           auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+        self.driver = GraphDatabase.driver(myUri, auth=basic_auth("neo4j", myPassword))
 
     def get(self, movie_id):
         with self.driver.session() as session:
@@ -57,8 +57,7 @@ class MovieDirectorResource(Resource):
 
 class DirectorMoviesResource(Resource):
     def __init__(self):
-        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io", 
-                                           auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+        self.driver = GraphDatabase.driver(myUri, auth=basic_auth("neo4j", myPassword))
 
     def get(self, director_id):
         with self.driver.session() as session:

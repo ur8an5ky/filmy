@@ -13,6 +13,8 @@ const MovieDetail = () => {
   const [director, setDirector] = useState(null);
   const [directors, setDirectors] = useState([]);
   const [selectedDirector, setSelectedDirector] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const fetchDirector = async () => {
     try {
@@ -58,6 +60,15 @@ const MovieDetail = () => {
     setSelectedDirector(event.target.value);
   };
 
+  const handleOpenSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -80,14 +91,14 @@ const MovieDetail = () => {
   const handleSelectSubmit = async (event) => {
     event.preventDefault();
     if (!selectedDirector) {
-      alert('Please select a director.');
+      handleOpenSnackbar('Please select a director.');
       return;
     }
   
     try {
       await apiClient.post('/directs', { director_id: selectedDirector, movie_id: movieId });
-      alert('Director linked to the movie successfully.');
-      fetchDirector(); // Ponownie pobierz informacje o reżyserze
+      handleOpenSnackbar('Director linked to the movie successfully.');
+      fetchDirector();
     } catch (error) {
       console.error('Error linking director:', error);
     }
@@ -158,6 +169,16 @@ const MovieDetail = () => {
           </>
         )}
       </Paper>
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
     </Box>
       )}  
     </>

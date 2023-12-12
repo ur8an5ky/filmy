@@ -6,6 +6,17 @@ import { Helmet } from 'react-helmet';
 const MovieForm = () => {
   const [title, setTitle] = useState('');
   const [year, setYear] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleOpenSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -14,6 +25,7 @@ const MovieForm = () => {
       console.log(response.data);
       setTitle('');
       setYear('');
+      handleOpenSnackbar('Movie added successfully.');
     } catch (error) {
       console.error(error);
     }
@@ -51,6 +63,16 @@ const MovieForm = () => {
           </form>
         </FormControl>
       </Paper>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+          <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
     </Box>
     </>
   );

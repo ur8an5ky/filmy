@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import apiClient from '../api/apiClient';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box, CircularProgress } from '@mui/material';
+import { Helmet } from 'react-helmet';
 
 const Directors = () => {
   const [directors, setDirectors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchDirectors = async () => {
       try {
+        setIsLoading(true);
         const response = await apiClient.get('/director'); 
         setDirectors(response.data);
       } catch (error) {
         console.error('Error fetching directors:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -19,6 +25,15 @@ const Directors = () => {
   }, []);
 
 return (
+  <>
+    <Helmet>
+      <title>Directors</title>
+    </Helmet>
+    {isLoading ? (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+        <CircularProgress />
+      </Box>
+    ) : (
   <TableContainer component={Paper}>
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
       <TableHead>
@@ -48,6 +63,8 @@ return (
       </TableBody>
     </Table>
   </TableContainer>
+    )}
+  </>
 );
 };
 

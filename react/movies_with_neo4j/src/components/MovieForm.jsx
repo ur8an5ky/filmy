@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import apiClient from '../api/apiClient';
-import { TextField, Button, Paper, Box, FormControl } from '@mui/material';
+import { TextField, Button, Paper, Box, FormControl, Snackbar, Alert } from '@mui/material';
+import { Helmet } from 'react-helmet';
 
 const MovieForm = () => {
   const [title, setTitle] = useState('');
@@ -19,10 +20,14 @@ const MovieForm = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
-      <Paper elevation={3} sx={{ p: 3, minWidth: '300px' }}>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <form onSubmit={handleSubmit}>
+    <>
+      <Helmet>
+        <title>Add Movie</title>
+      </Helmet>
+      <Box>
+        <Paper elevation={3} sx={{ p: 3, minWidth: '300px' }}>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <form onSubmit={handleSubmit}>
             <TextField
               label="Movie Title"
               type="text"
@@ -47,6 +52,7 @@ const MovieForm = () => {
         </FormControl>
       </Paper>
     </Box>
+    </>
   );
 };
 

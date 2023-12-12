@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import apiClient from '../api/apiClient';
-import { TextField, Button, Paper, Box, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
+import { TextField, Button, Paper, Box, FormControl, InputLabel, Select, MenuItem, Typography, Snackbar, Alert, CircularProgress } from '@mui/material';
+import { Helmet } from 'react-helmet';
 
 const MovieDetail = () => {
   const { movieId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [movieTitle, setMovieTitle] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -12,16 +14,23 @@ const MovieDetail = () => {
   const [directors, setDirectors] = useState([]);
   const [selectedDirector, setSelectedDirector] = useState('');
 
-  useEffect(() => {
-    const fetchDirector = async () => {
-      try {
-        const response = await apiClient.get(`/movie/${movieId}/director`);
+  const fetchDirector = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get(`/movie/${movieId}/director`);
+      if (response.data.director) {
         setDirector(response.data.director);
-      } catch (error) {
-        console.error('Error fetching director:', error);
+      } else {
+        setDirector(null);
       }
-    };
-
+    } catch (error) {
+      console.error('Error fetching director:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     const fetchDirectors = async () => {
       try {
         const response = await apiClient.get('/director');
@@ -85,6 +94,15 @@ const MovieDetail = () => {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>{movieTitle}</title>
+      </Helmet>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+          <CircularProgress />
+        </Box>
+      ) : (
     <Box sx={{ padding: 2 }}>
       <Paper elevation={3} sx={{ padding: 2, backgroundColor: 'white' }}>
       <Typography variant="h4" gutterBottom sx={{fontWeight: 'bold', fontStyle: 'italic'}}>{movieTitle}</Typography>
@@ -141,6 +159,8 @@ const MovieDetail = () => {
         )}
       </Paper>
     </Box>
+      )}  
+    </>
   );
 };
 

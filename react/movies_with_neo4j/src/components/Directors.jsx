@@ -13,7 +13,7 @@ const Directors = () => {
       try {
         setIsLoading(true);
         const response = await apiClient.get('/director'); 
-        setDirectors(response.data);
+        setDirectors(response.data.directors);
       } catch (error) {
         console.error('Error fetching directors:', error);
       } finally {
@@ -34,35 +34,35 @@ return (
         <CircularProgress />
       </Box>
     ) : (
-  <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-      <TableHead>
-        <TableRow sx={{ borderBottom: "2px solid" }}>
-          <TableCell align="center">First Name</TableCell>
-          <TableCell align="center">Last Name</TableCell>
-          <TableCell align="right"></TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {directors.map((director) => (
-          <TableRow
-            key={director.lastName}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          >
-            <TableCell align="center" component="th" scope="director" sx={{ fontWeight: 'bold', fontStyle: 'italic' }}>
-              {director.firstName}
-            </TableCell>
-            <TableCell align="center">{director.lastName}</TableCell>
-            <TableCell align="right">
-              <Button variant="contained" color="primary">
-                Directed Movies
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  </TableContainer>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow sx={{ borderBottom: "2px solid" }}>
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {directors.map((director) => (
+              <TableRow
+                key={director.director_id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell align="center" component="th" scope="director" sx={{ fontWeight: 'bold', fontStyle: 'italic' }}>
+                  {director.first_name} {director.last_name}
+                </TableCell>
+                <TableCell align="right">
+                  <Link to={`/directors/${director.director_id}/movies`} style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" color="primary">
+                      Directed Movies
+                    </Button>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     )}
   </>
 );

@@ -40,29 +40,32 @@ const MovieForm = () => {
         <Paper elevation={3} sx={{ p: 3, minWidth: '300px' }}>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <form onSubmit={handleSubmit}>
-            <TextField
-              label="Movie Title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              variant="outlined"
-              sx={{ mb: 2 }}
-            />
-            <TextField
-              label="Release Year"
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              variant="outlined"
-              sx={{ mb: 2 }}
-            />
-            <Button type="submit" variant="contained" color="primary">
-              Add new movie
-            </Button>
-          </form>
-        </FormControl>
-      </Paper>
+              <Box display="flex" gap={2} mb={2}>
+                <TextField
+                  label="Movie Title"
+                  variant="outlined"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                  sx={{ mb: 2 }}
+                />
+                <TextField
+                  label="Release Year"
+                  variant="outlined"
+                  type="number"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  required
+                  sx={{ mb: 2 }}
+                />
+              </Box>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Add new movie
+              </Button>
+            </form>
+          </FormControl>
+        </Paper>
         <Snackbar
           open={openSnackbar}
           autoHideDuration={6000}
@@ -73,7 +76,7 @@ const MovieForm = () => {
             {snackbarMessage}
           </Alert>
         </Snackbar>
-    </Box>
+      </Box>
     </>
   );
 };

@@ -49,7 +49,43 @@ class MovieDirectorResource(Resource):
                     }
                 }, 200
             else:
-                return {"message": "No director found for this movie"}, 404
+                return {"message": "No director found for this movie", "director": None}, 200
+
+    def __del__(self):
+        self.driver.close()
+
+
+class DirectorMoviesResource(Resource):
+    def __init__(self):
+        self.driver = GraphDatabase.driver("neo4j+s://1c61e2d9.databases.neo4j.io", 
+                                           auth=basic_auth("neo4j", "LRcvS2deNTDBYl71nIJWLzzxQ069BefLKXlMx9hMjlc"))
+
+    def get(self, director_id):
+        with self.driver.session() as session:
+            director_result = session.run("""
+                MATCH (d:Director {director_id: $director_id})
+                RETURN d.director_id AS director_id, d.first_name AS first_name, d.last_name AS last_name
+            """, director_id=director_id)
+            director_record = director_result.single()
+
+            movies_result = session.run("""
+                MATCH (d:Director {director_id: $director_id})-[:DIRECTS]->(m:Movie)
+                RETURN m.movie_id AS movie_id, m.title AS title, m.year AS year
+            """, director_id=director_id)
+            movies = [{"movie_id": record["movie_id"], "title": record["title"], "year": record["year"]} 
+                      for record in movies_result]
+
+            if director_record:
+                return {
+                    "director": {
+                        "director_id": director_record["director_id"],
+                        "first_name": director_record["first_name"],
+                        "last_name": director_record["last_name"]
+                    },
+                    "movies": movies
+                }, 200
+            else:
+                return {"message": "Director not found"}, 404
 
     def __del__(self):
         self.driver.close()

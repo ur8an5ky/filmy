@@ -6,7 +6,7 @@
         "start": "python flask/run.py"
       },
       "engines": {
-        "node": "15.x",
+        "node": "18.17.1",
         "yarn": "1.22.21"
       }
     }

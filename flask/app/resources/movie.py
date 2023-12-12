@@ -49,5 +49,19 @@ class SingleMovieResource(Resource):
                 }, 200
             else:
                 return {"message": "Movie not found"}, 404
+    
+    def delete(self, movie_id):
+        with self.driver.session() as session:
+            result = session.run("""
+                MATCH (m:Movie {movie_id: $movie_id})
+                DETACH DELETE m
+                RETURN COUNT(m) AS deleted_count
+            """, movie_id=movie_id)
+            count = result.single()[0]
+            if count == 0:
+                return {"message": "Movie not found or already deleted."}, 404
+            else:
+                return {"message": "Movie deleted successfully."}, 200
+
     def __del__(self):
         self.driver.close()

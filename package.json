@@ -1,12 +1,12 @@
 {
-    "name": "twoja-aplikacja",
-    "version": "1.0.0",
+    "name": "movies_with_neo4j",
+    "version": "0.0.0",
     "scripts": {
-        "build": "cd react/movies_with_neo4j && yarn && yarn build",
+        "heroku-postbuild": "cd react/movies_with_neo4j && yarn install && yarn build",
         "start": "python flask/run.py"
-      },          
-    "engines": {
+      },
+      "engines": {
         "node": "12.x"
+      }
     }
-}
   
